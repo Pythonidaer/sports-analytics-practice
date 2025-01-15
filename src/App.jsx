@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './App.css'
+import PropTypes from 'prop-types';
 
 // Sample data - GOAL: to replace with real data from a Kaggle CSV
 
@@ -62,6 +63,12 @@ const DashboardCard = ({ title, children }) => (
     <div>{children}</div>
   </div>
 );
+
+// After your DashboardCard component definition, add the prop-types validation:
+DashboardCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
+};
 
 const App = () => {
   const [selectedSeason, setSelectedSeason] = useState('2023');
