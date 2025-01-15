@@ -1,1 +1,32 @@
-bmFtZTogQ0kKCm9uOgogIHB1bGxfcmVxdWVzdDoKICAgIGJyYW5jaGVzOiBbIG1haW4gXQogIHB1c2g6CiAgICBicmFuY2hlczogWyBtYWluIF0KCmpvYnM6CiAgdGVzdDoKICAgIHJ1bnMtb246IHVidW50dS1sYXRlc3QKICAgIAogICAgc3RlcHM6CiAgICAtIHVzZXM6IGFjdGlvbnMvY2hlY2tvdXRAdjMKICAgIAogICAgLSBuYW1lOiBTZXR1cCBOb2RlLmpzCiAgICAgIHVzZXM6IGFjdGlvbnMvc2V0dXAtbm9kZUB2MwogICAgICB3aXRoOgogICAgICAgIG5vZGUtdmVyc2lvbjogJzIwJwogICAgICAgIGNhY2hlOiAnbnBtJwogICAgCiAgICAtIG5hbWU6IEluc3RhbGwgZGVwZW5kZW5jaWVzCiAgICAgIHJ1bjogbnBtIGNpCiAgICAKICAgIC0gbmFtZTogTGludAogICAgICBydW46IG5wbSBydW4gbGludAogICAgICAKICAgIC0gbmFtZTogVHlwZSBjaGVjawogICAgICBydW46IG5wbSBydW4gdHlwZWNoZWNrIHx8IGVjaG8gIk5vIHR5cGVjaGVjayBzY3JpcHQgZm91bmQiCiAgICAKICAgIC0gbmFtZTogQnVpbGQKICAgICAgcnVuOiBucG0gcnVuIGJ1aWxk
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Lint
+      run: npm run lint
+      
+    - name: Type check
+      run: npm run typecheck || echo "No typecheck script found"
+    
+    - name: Build
+      run: npm run build
