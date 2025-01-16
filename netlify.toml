@@ -3,7 +3,7 @@
   publish = "dist"
 
 [context.production]
-  environment = { NODE_VERSION = "18.0.0" }
+  environment = { NODE_VERSION = "20.11.1" }
 
 [context.deploy-preview]
   command = "npm run build:preview"
