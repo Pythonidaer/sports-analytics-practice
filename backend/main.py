@@ -19,19 +19,19 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Sports Analytics API")
 
 # Configure CORS
-ENV = os.getenv("ENVIRONMENT", "development")  # Default to "development"
-CORS_ORIGIN = os.getenv("CORS_ORIGIN", "http://localhost:5173")  # Default for local development
+# Get the environment and CORS origins
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")  # Defaults to 'development'
+CORS_ORIGIN = os.getenv("CORS_ORIGIN", "")
 
-# Allowed origins for production and previews
-# Parse the CORS_ORIGIN value into a list of origins
-allowed_origins = CORS_ORIGIN.split(",")
+# Set allowed origins dynamically
+allowed_origins = []
 
-if ENV == "production":
-    # Add Netlify deploy preview domains for production
-    allowed_origins.extend([
-        "https://sports-analytics-demo.netlify.app",  # Production domain
-        *(f"https://deploy-preview-{i}--sports-analytics-demo.netlify.app" for i in range(1, 101))
-    ])
+if ENVIRONMENT == "development":
+    # Allow local frontend during development
+    allowed_origins.append("http://localhost:5173")
+else:
+    # Parse production CORS_ORIGIN, including deploy previews
+    allowed_origins.extend(CORS_ORIGIN.split(","))
 
 # Add CORS middleware
 app.add_middleware(
