@@ -23,7 +23,8 @@ ENV = os.getenv("ENVIRONMENT", "development")  # Default to "development"
 CORS_ORIGIN = os.getenv("CORS_ORIGIN", "http://localhost:5173")  # Default for local development
 
 # Allowed origins for production and previews
-allowed_origins = [CORS_ORIGIN]
+# Parse the CORS_ORIGIN value into a list of origins
+allowed_origins = CORS_ORIGIN.split(",")
 
 if ENV == "production":
     # Add Netlify deploy preview domains for production
