@@ -29,9 +29,15 @@ allowed_origins = []
 if ENVIRONMENT == "development":
     # Allow local frontend during development
     allowed_origins.append("http://localhost:5173")
-else:
-    # Parse production CORS_ORIGIN, including deploy previews
+elif CORS_ORIGIN:
+    # Add static origins from environment
     allowed_origins.extend(CORS_ORIGIN.split(","))
+    # Dynamically add all possible deploy preview domains
+    allowed_origins.extend([
+        f"https://deploy-preview-{i}--sports-analytics-demo.netlify.app"
+        for i in range(1, 101)  # Adjust range if necessary
+    ])
+    
 
 # Add CORS middleware
 app.add_middleware(
@@ -41,6 +47,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api/debug-cors")
+def debug_cors():
+    return {"allowed_origins": allowed_origins}
 
 # Health check endpoint
 @app.get("/api/health")
